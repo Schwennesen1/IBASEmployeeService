@@ -2,7 +2,9 @@ namespace IBASEmployeeService.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using IBASEmployeeService.Models;
-    
+    using System.Collections.Generic;
+    using System.Linq;
+
     [ApiController]
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
@@ -13,11 +15,7 @@ namespace IBASEmployeeService.Controllers
             _logger = logger;
         }
 
-
-        [HttpGet("GetEmployees")]
-        public IEnumerable<Employee> Get()
-        {
-            var employees = new List<Employee>() {
+        List<Employee> employees = new List<Employee>() {
             new Employee() {
                 Id = "21",
                 Name = "Mette Bangsbo",
@@ -64,9 +62,21 @@ namespace IBASEmployeeService.Controllers
                 }
             }
         };
-            return employees;
+
+        [HttpGet("GetSalgEmployees")]
+        public IEnumerable<Employee> GetSalgEmployees()
+        {
+            // Filter employees with Department.Id == 1 (Salg)
+            var salgEmployees = employees.Where(e => e.Department.Id == 1).ToList();
+            return salgEmployees;
+        }
+
+        [HttpGet("GetKantineEmployees")]
+        public IEnumerable<Employee> GetKantineEmployees()
+        {
+            // Filter employees with Department.Id == 4 (Kantine)
+            var kantineEmployees = employees.Where(e => e.Department.Id == 4).ToList();
+            return kantineEmployees;
         }
     }
-
-
 }
